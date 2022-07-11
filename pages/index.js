@@ -11,17 +11,16 @@ export default function Home({ posts,widget }) {
   return (
     <div className="container">
       <Head>
-        <title>Headless WP Next Starter</title>
+        <title>[PROJETO CMS] - Headless WP GADZ</title>
         <link rel="icon" href="favicon.ico"></link>
       </Head>
 
       <main>
         <h1 className="title">
-          Headless WordPress Next.js Starter
+          Projeto CMS WP - Piloto GADZ
         </h1>
 
-        <p className="description">
-          Get started by editing <code>pages/index.js</code>
+        <p className="description">START DO PROJETO
         </p>
 
         <div className="grid">
