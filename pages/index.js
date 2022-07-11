@@ -2,6 +2,8 @@ import Head from 'next/head';
 import Footer from '../components/Footer';
 import PostCard from '../components/PostCard';
 import { getAllPosts } from '../lib/test-data';
+import { client } from '../lib/apollo';
+import { gql } from "@apollo/client";
 
 
 export default function Home({ posts }) {
@@ -25,7 +27,7 @@ export default function Home({ posts }) {
           {
             posts.map((post) => {
               return (
-                <PostCard key={post.uri} post={post}></PostCard>
+                <PostCard key={post.id} post={post}></PostCard>
               )
             })
           }
@@ -39,8 +41,31 @@ export default function Home({ posts }) {
 
 export async function getStaticProps(){
 
-  const response = await getAllPosts()
-  const posts = response?.data?.posts?.nodes
+  // Paste your GraphQL query inside of a gql tagged template literal
+  const GET_POSTS = gql`
+    query AllPostsQuery {
+      posts {
+        nodes {
+          title
+          date
+          uri
+          id
+        }
+      }
+    }
+  `;
+
+
+  // Here we make a call with the client and pass in our query string to the 
+  // configuration objects 'query' property
+  const response = await client.query({
+    query: GET_POSTS,
+    context:{
+      headers: { Accept: 'application/json' }
+    }
+  })
+  const posts = response?.data?.posts?.nodes; 
+
   return {
     props: {
       posts
