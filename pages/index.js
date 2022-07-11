@@ -20,7 +20,7 @@ export default function Home({ posts,widget }) {
           Projeto CMS WP - Piloto GADZ
         </h1>
 
-        <p className="description">START DO PROJETO
+        <p className="description">START DO PROJETO CMS
         </p>
 
         <div className="grid">
