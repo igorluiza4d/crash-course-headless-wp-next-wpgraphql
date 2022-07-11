@@ -1,12 +1,13 @@
 import Head from 'next/head';
 import Footer from '../components/Footer';
 import PostCard from '../components/PostCard';
+import PostWidget from '../components/PostWidget';
 import { getAllPosts } from '../lib/test-data';
 import { client } from '../lib/apollo';
 import { gql } from "@apollo/client";
 
-
-export default function Home({ posts }) {
+export default function Home({ posts,widget }) {
+  console.log(widget);
   return (
     <div className="container">
       <Head>
@@ -28,6 +29,15 @@ export default function Home({ posts }) {
             posts.map((post) => {
               return (
                 <PostCard key={post.id} post={post}></PostCard>
+              )
+            })
+          }
+        </div>
+        <div className='grid'>
+          {
+            widget.map( (wid) => {
+              return (
+                <PostWidget key={wid.id} widget={wid}></PostWidget>
               )
             })
           }
@@ -54,7 +64,18 @@ export async function getStaticProps(){
       }
     }
   `;
-
+    const OTHER_QUERY = gql`
+    query WideGetHome {
+      widgets(where: {sidebar: HOMEPAGE_WIDGET_AREA}) {
+        nodes {
+          id
+          title
+          type
+          html
+        }
+      }
+    }
+    `;
 
   // Here we make a call with the client and pass in our query string to the 
   // configuration objects 'query' property
@@ -64,11 +85,27 @@ export async function getStaticProps(){
       headers: { Accept: 'application/json' }
     }
   })
-  const posts = response?.data?.posts?.nodes; 
 
+  const responseWdiget = await client.query({
+    query: OTHER_QUERY,
+    context:{
+      headers: { Accept: 'application/json' }
+    }
+  })
+
+  const posts = response?.data?.posts?.nodes; 
+  console.log(responseWdiget);
+  const widget = responseWdiget.data.widgets.nodes;
+  console.log(responseWdiget.data.widgets.nodes);
   return {
     props: {
-      posts
+      posts,
+      widget
     }
   }
+  // return {
+  //   props: {
+  //     posts
+  //   }
+  // }
 }
