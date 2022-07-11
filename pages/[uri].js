@@ -65,7 +65,7 @@ export async function getStaticProps({ params }){
   }
 
 export async function getStaticPaths(){
-    const paths = ['uncategorized']
+    const paths = []
     return {
         paths,
         fallback: 'blocking'
